@@ -1,6 +1,6 @@
 import {
     getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged, createUserWithEmailAndPassword,
-    sendEmailVerification,signInWithEmailAndPassword,sendPasswordResetEmail
+    sendEmailVerification, signInWithEmailAndPassword, sendPasswordResetEmail
 } from "firebase/auth";
 import { useEffect, useState } from "react";
 import initializeAuthentication from "../Pages/Login/Firebase/Firebase.init";
@@ -44,20 +44,29 @@ const useFirebase = () => {
     const handleLogin = (e) => {
         e.preventDefault();
         signInWithEmailAndPassword(auth, email, password)
-        .then(result => {
-            setUser(result.user);
-        })
-        .finally(() => setLoading(false));
-      };
+            .then((result) => {
+                const { email, name, PhotoURL } = result.user;
+                const user = {
+                    name: name,
+                    email: email,
+                    photo: PhotoURL,
+                };
+                setUser(user);
+                setError("");
+            })
+            .catch((error) => {
+                setError(error.message);
+            });
+    };
 
 
-      const hanleResetPassword = () => {
+    const hanleResetPassword = () => {
         sendPasswordResetEmail(auth, email)
-          .then(() => {})
-          .catch((err) => {
-            console.log(err.message);
-          });
-      };
+            .then(() => { })
+            .catch((err) => {
+                console.log(err.message);
+            });
+    };
 
     const handleOnSubmit = (e) => {
         e.preventDefault();
@@ -71,7 +80,7 @@ const useFirebase = () => {
     };
     const verifyEmail = () => {
         sendEmailVerification(auth.currentUser).then(() => {
-           
+
         });
     };
 
@@ -110,7 +119,7 @@ const useFirebase = () => {
         user,
         loading,
         signInWithGoogle,
-        logOut, handleEmailChange, handlePasswordChange, handleOnSubmit,handleLogin,error,hanleResetPassword
+        logOut, handleEmailChange, handlePasswordChange, handleOnSubmit, handleLogin, error, hanleResetPassword
 
     }
 }

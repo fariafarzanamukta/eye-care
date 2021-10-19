@@ -1,6 +1,7 @@
 import React from 'react';
 import useAuth from '../../../Hooks/useAuth';
 
+
 const Login = () => {
     const { signInWithGoogle, error, handleLogin, handleEmailChange, handlePasswordChange, hanleResetPassword } = useAuth();
     return (
@@ -45,6 +46,7 @@ const Login = () => {
                         Reset Password
                     </button>
                 </div>
+
             </div>
 
 
